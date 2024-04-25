@@ -31,11 +31,11 @@ export interface IPostModel extends Model<IPostDocument> {
 }
 
 const PostSchema = new Schema<IPostDocument>({
-  content: { type: String, required: true, maxlength: 2500 },
+  content: { type: String, required: true, maxlength: 25000 },
   author: { type: Schema.ObjectId, required: true, immutable: true },
   timestamp: {
     created: { type: Date, required: true, default: () => Date.now(), immutable: true },
-    edited: { type: Date, required: true, default: null }
+    edited: { type: Date, default: null }
   },
   tags: { type: [String], required: true, default: [] },
   savedBy: { type: [Schema.ObjectId], required: true, default: [] },

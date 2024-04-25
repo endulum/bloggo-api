@@ -1,6 +1,8 @@
 import express from 'express'
 import asyncHandler from 'express-async-handler'
+
 import userController from '../controllers/userController'
+import postController from '../controllers/postController'
 
 const router = express.Router()
 
@@ -24,5 +26,31 @@ router.route('/login')
     })
   }))
   .post(userController.logIn)
+
+router.route('/posts')
+  .post(
+    userController.authenticate,
+    postController.createPost
+  )
+
+router.route('/post/:post')
+  .put(
+    userController.authenticate,
+    postController.doesPostExist,
+    postController.areYouPostAuthor,
+    postController.editPost
+  )
+  .delete(
+    userController.authenticate,
+    postController.doesPostExist,
+    postController.areYouPostAuthor,
+    postController.deletePost
+  )
+
+router.route('/user/:id/posts')
+  .get(
+    userController.doesUserExist,
+    postController.getPostsByUser
+  )
 
 export default router
