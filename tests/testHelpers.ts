@@ -3,7 +3,7 @@ import jsonwebtoken from 'jsonwebtoken'
 import 'dotenv/config'
 
 import app from './appTesting'
-import User from '../models/user'
+import User, { type IUserDocument } from '../models/user'
 
 // reassign an object using this function to avoid "possibly null/undefined" errors
 export const assertDefined = <T>(obj: T | null | undefined): T => {
@@ -39,7 +39,7 @@ export const reqShort = async (
 // creates a user + token pair
 export const createUser = async (
   username: string
-): Promise<{ username: string, token: string }> => {
+): Promise<{ user: IUserDocument, token: string }> => {
   // first, make the User object
   const user = await User.create({ username, password: 'password' })
   // then sign the token for the object
@@ -49,7 +49,7 @@ export const createUser = async (
     { username, id: user.id }, secret
   )
   // finally, return everything
-  return { username, token }
+  return { user, token }
 }
 
 // loop through a given array of possible validation errors

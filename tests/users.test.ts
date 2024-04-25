@@ -198,3 +198,7 @@ describe('user client ops', () => {
     })
   })
 })
+
+// todo
+// change "PUT /user/:user" to "PUT /account" for changing own account settings
+// why do we need "GET /user/:user"?
