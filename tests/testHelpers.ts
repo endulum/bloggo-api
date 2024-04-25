@@ -1,5 +1,9 @@
 import request, { type Response } from 'supertest'
+import jsonwebtoken from 'jsonwebtoken'
+import 'dotenv/config'
+
 import app from './appTesting'
+import User from '../models/user'
 
 // reassign an object using this function to avoid "possibly null/undefined" errors
 export const assertDefined = <T>(obj: T | null | undefined): T => {
@@ -30,6 +34,22 @@ export const reqShort = async (
       .get(url)
       .set({ Authorization: token !== null ? `Bearer ${token}` : '' })
   }
+}
+
+// creates a user + token pair
+export const createUser = async (
+  username: string
+): Promise<{ username: string, token: string }> => {
+  // first, make the User object
+  const user = await User.create({ username, password: 'password' })
+  // then sign the token for the object
+  const secret = process.env.SECRET
+  if (secret === undefined) throw new Error('JWT secret is not defined.')
+  const token = jsonwebtoken.sign(
+    { username, id: user.id }, secret
+  )
+  // finally, return everything
+  return { username, token }
 }
 
 // loop through a given array of possible validation errors
